@@ -4,4 +4,6 @@ This is a web-based javascript application that pulls from the New York Times Se
 
 [Try the application here](https://peterbaker644.github.io/NYT-Search-Application/) 
 
+
+
 ![Screenshot](https://raw.githubusercontent.com/PeterBaker644/NYT-Search-Application/master/screenshots/screenshot_1.png)
