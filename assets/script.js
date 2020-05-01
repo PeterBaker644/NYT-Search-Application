@@ -8,14 +8,19 @@ function searchArticles() {
     var endYear = $("#endYear").val();
 
     if (startYear !== "" || endYear !== "") {
-        if (startYear !== "") {
+        if (startYear !== "" && startYear > "1800" && startYear < moment().format("YYYY")) {
         queryDate += ("&begin_date=" + startYear + "0101");
+        } else {
+            $("#startYear").val("1900");
+            return;
         }
-        if (endYear !== "") {
+        if (endYear !== "" && endYear >= startYear && endYear < moment().format("YYYY")) {
         queryDate += ("&end_date=" + endYear + "1231");    
+        } else {
+            moment().format("YYYY");
+            return;
         }
         searchValue += queryDate;
-        console.log(searchValue);
     }
 
     if (typeof sortValue !== "undefined") {
@@ -26,18 +31,12 @@ function searchArticles() {
 
     var queryURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=" + searchValue + "&api-key=YNvKAVMibv1E5QAAY3Hr3KHhf7jDA6wR";
 
-    console.log(queryURL);
-
-    // source: fq=source:("The New York Times")
-    //example of dates: q=" + searchTerm + "&facet_fields=source&facet=true&begin_date=20120101&end_date=20121231
-
     $.ajax({
         url: queryURL,
         method: "GET"
     }).then(function (response) {   
         var articleList = response.response.docs;
         var numRecords = $("#num-records").val();
-        console.log(articleList);
         for (i = 0; i < numRecords; i++) {
             current = articleList[i];
             wrapper = $("<div>");
@@ -93,7 +92,6 @@ var sortValue = "popular";
 
 $("#search").on("click", function (event) {
     event.preventDefault();
-    console.log("pressed");
     searchArticles();
 });
 
@@ -109,7 +107,6 @@ $("#clear").on("click", function (event) {
 $("input[type=radio]").on("change", function() {
     sortValue = $("input:checked").val();
     if ($("#top-articles").html() == "") {
-        console.log ("It's empty!")
     } else {
         searchArticles();
     }
